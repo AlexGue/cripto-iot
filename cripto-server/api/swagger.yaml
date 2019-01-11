@@ -1,0 +1,126 @@
+---
+swagger: "2.0"
+info:
+  description: "Simulación Criptografia"
+  version: "1.0.0"
+  title: "Sistema de autenticación IoT"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "apiteam@swagger.io"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost:8080"
+basePath: "/v2"
+tags:
+- name: "register"
+  description: "Registro de dispositivos"
+  externalDocs:
+    description: "Find out more"
+    url: "http://swagger.io"
+- name: "auth"
+  description: "Autenticacion de dispositivos"
+- name: "msg"
+  description: "Comunicacion con dispositivos"
+  externalDocs:
+    description: "Find out more about our store"
+    url: "http://swagger.io"
+schemes:
+- "https"
+- "http"
+paths:
+  /register/{deviceId}:
+    post:
+      tags:
+      - "register"
+      summary: "Registra un nuevo dispositivo"
+      description: ""
+      operationId: "registerDevice"
+      consumes:
+      - "application/json"
+      - "application/x-www-form-urlencoded"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "deviceId"
+        in: "path"
+        description: "ID of pet that needs to be updated"
+        required: true
+        type: "string"
+      responses:
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "Register"
+  /auth/first/{deviceId}:
+    post:
+      tags:
+      - "auth"
+      summary: "Primer paso en la autenticacion"
+      description: ""
+      operationId: "firstAuth"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "deviceId"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/string"
+      x-swagger-router-controller: "Auth"
+  /auth/second/{deviceId}:
+    post:
+      tags:
+      - "auth"
+      summary: "Segundo paso en la autenticacion"
+      description: ""
+      operationId: "secondAuth"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "deviceId"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/string"
+      x-swagger-router-controller: "Auth"
+securityDefinitions:
+  petstore_auth:
+    type: "oauth2"
+    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      write:pets: "modify pets in your account"
+      read:pets: "read your pets"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+definitions:
+  string:
+    type: "string"
+  firstAuth:
+    type: "object"
+    properties:
+      deviceId:
+        type: "string"
+      p1:
+        type: "string"
+      p2:
+        type: "string"
+  secondAuth:
+    type: "object"
+    properties:
+      V1:
+        type: "string"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"

@@ -1,0 +1,25 @@
+{
+  "name": "sistema-de-autenticaci-n-iot",
+  "version": "1.0.0",
+  "description": "Simulación Criptografia",
+  "main": "index.js",
+  "scripts": {
+    "prestart": "npm install",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "swagger"
+  ],
+  "license": "Unlicense",
+  "private": true,
+  "dependencies": {
+    "connect": "^3.6.6",
+    "elliptic": "^6.4.1",
+    "js-md5": "^0.7.3",
+    "js-sha1": "^0.6.0",
+    "js-yaml": "^3.12.0",
+    "md5": "^2.2.1",
+    "sha1": "^1.1.1",
+    "swagger-tools": "^0.10.1"
+  }
+}
