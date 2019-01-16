@@ -24,11 +24,7 @@ exports.registerDevice = function(deviceId) {
   if (devices.includes(deviceId)){
     resolve("ERROR: Ese dispositivo ya está registrado.")
   }
-  
-
   devices.push(deviceId);
-  
-  //console.log("============= SERVER - 1 STEP ==============")
   var R = utils.randomBits(l_H);
   logItem("R", R)
   var X = utils.randomSecret(l_H); //Esto de momento se genera igual que el randomBits, es asi?
@@ -61,12 +57,8 @@ exports.registerDevice = function(deviceId) {
   text += "Calculos del dispositivo iOT (Siguiente paso):\n"
   text += step2(CK2) + "\n"
   text += "=========================================="
-  //console.log(text)
   resolve(text);
   })
-  //return new Promise(function(resolve, reject) {
-   // resolve();
-  //});
 }
 
 
@@ -81,12 +73,10 @@ exports.secondStep = function(deviceId, P1, P2) {
   var CK = serverDB[deviceId]["CK"]
   var A2 = serverDB[deviceId]["A2"]
   var T = serverDB[deviceId]["T"]
-  //console.log("============= SERVER - 2 STEP ==============")
 
   var N2 = utils.randomBits(l_H);
   serverDB[deviceId]["N2"] = N2;
   serverDB[deviceId]["P1"] = P1;
-  //console.log(utils.pointStr(utils.ellipticMult(utils.getBits(CK), P1)));
   var P22 = sha1(utils.pointStr(P1) + "" + utils.pointStr(utils.ellipticMult(utils.getBits(CK), P1)))
   logItem("P22", P22)
   if (P22 != P2){
@@ -96,7 +86,6 @@ exports.secondStep = function(deviceId, P1, P2) {
     console.log("Dispositivo [" +  deviceId + "] - Primer paso autentificación completada.")
   }
     var P3 = utils.ellipticMult(N2,G)
-    //logItem("p4real", utils.pointStr(utils.ellipticMult(N2, A2)))
     var P4 = sha1(P22 + "" + utils.pointStr(utils.ellipticMult(N2, A2)))
     serverDB[deviceId]["P3"] = P3;
     serverDB[deviceId]["P4"] = P4;
@@ -108,9 +97,7 @@ exports.secondStep = function(deviceId, P1, P2) {
   text += "Calculos del dispositivo iOT (Siguiente paso):\n"
   text += step3(T, P3, P4) + "\n"
   text += "=========================================="
-  //console.log(text)
   resolve(text);
-  //step3(T, P3, P4)
   })
 }
 
@@ -127,7 +114,6 @@ exports.lastStep = function(deviceId, V){
   var P4 = serverDB[deviceId]["P4"];
   var N2 = serverDB[deviceId]["N2"];
   var P1 = serverDB[deviceId]["P1"];
-  //console.log("============= SERVER - LAST STEP ==============")
 
  var V2 = sha1(P4 + "" + utils.pointStr(utils.ellipticMult(N2,P1)));
  logItem("V2", V2)
@@ -142,7 +128,7 @@ exports.lastStep = function(deviceId, V){
   console.log("Clave compartida: " + SK)
   console.log("====================================")
   resolve("Autentificación completada.")
-//}
+
   })
 
 }
@@ -156,17 +142,7 @@ exports.lastStep = function(deviceId, V){
 // DEVICE - SIMULATION
 
 
-
-//var id = 155;
-
-function step1(){
-  console.log("============= DEVICE - STEP 1 ==============")
-  exports.registerDevice(id);
-}
-
-
 function step2(CK2){
- // console.log("============= DEVICE - STEP 2 ==============")
   deviceDB["CK2"] = CK2;
   //var id = 155;
   var N1 = utils.randomBits(l_H);
@@ -180,7 +156,6 @@ function step2(CK2){
   logItem("P2", P2)
   deviceDB["P2"] = P2;
   return "P1: " + JSON.stringify(P1) + "\nP2:"+ JSON.stringify(P2)
- // exports.secondStep(id,P1,P2)
 }
 
 //Tiene que sacar CK2 que lo guardo antes
@@ -189,7 +164,6 @@ function step3(T, P3, P4){
   var P2 = deviceDB["P2"];
   var N1 = deviceDB["N1"];
 
-  //console.log("============= DEVICE - STEP 3 ==============")
   var A = utils.hfunction(T + "" + utils.pointStr(CK2))
   var P42 = sha1(P2 + "" + utils.pointStr(utils.ellipticMult(utils.getBits(A), P3)))
   // if (P42 != P4){
@@ -202,14 +176,10 @@ function step3(T, P3, P4){
     var SK = sha1(utils.pointStr(P3) + "" + utils.pointStr(utils.ellipticMult(N1, P3)))
 
     return "A: " + JSON.stringify(A) + "\nP4':"+ JSON.stringify(P4) + "\nV':"+ JSON.stringify(V) + "\nCLAVE COMPARTIDA':"+ JSON.stringify(SK)
-   // exports.lastStep(deviceId, V);
- // }
 }
+
 
 
 function logItem(str, item){
   console.log("El valor de '" + str + "' es: " + JSON.stringify(item))
 }
-
-
-//step1();
