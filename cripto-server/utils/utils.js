@@ -26,33 +26,12 @@ exports.randomSecret = function(bitsNeeded){
     return bits;
 }
 
-
-
 exports.hfunction = function(number){
-    return md5(number)
-// var str = number.toString();
-// var sum = add(number)
-// //console.log("sum: " + str.substr(0, sum));
-// var result = str.substr(sum, str.length) + "" + str.substr(0, sum);
-// var finalResult = result
-// return finalResult;
-// }
-
-// function add(string) {
-//     string = (string + "").split('');                
-//     var sum = 0;                               
-//     for (var i = 0; i < string.length; i++) {  
-//      //   console.log(parseInt(string[i]))
-//      if (string[i] == 1 || string[i] == "1")
-//         sum++;
-              
-//     }
-//     return sum;     
+    return md5(number) 
 }  
 
-
-
 exports.ellipticMult = function(x, point){
+    //Esto debe implementar la multiplicación eliptica para hacer el sistema seguro
     return  { x: x*point.x, y: x*point.y }
 }
 
